@@ -1,88 +1,34 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>PhishNet — AI Phishing Detection</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/static/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhishNet</title>
+<link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
-  <div class="container">
-    <h1>🛡️ PhishNet</h1>
-    <p class="subtitle">AI-Powered Phishing Detection Platform</p>
+<div class="container">
+
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png">
+        <h1>PhishNet</h1>
+    </div>
+
+    <p class="tagline">AI-Powered Phishing Detection Platform</p>
 
     <div class="scan-box">
-      <input id="inputText" type="text" placeholder="Enter URL or Email text to scan">
-      <button onclick="scan()">Scan</button>
+        <input id="urlInput" type="text" placeholder="Enter URL or Email text to scan">
+        <button onclick="scanURL()">Scan</button>
     </div>
 
-    <div id="loader" class="loader hidden">
-      <div class="spinner"></div>
-      <p>Analyzing threat patterns...</p>
+    <div id="result" class="result-card" style="display:none;">
+        <h2 id="statusText"></h2>
+        <p id="confidenceText"></p>
     </div>
 
-    <div id="result" class="result hidden">
-      <h2>Scan Result</h2>
+</div>
 
-      <div class="gauge">
-        <div class="gauge-body">
-          <div id="gaugeFill" class="gauge-fill"></div>
-          <div class="gauge-center">
-            <span id="riskPercent">0%</span>
-          </div>
-        </div>
-      </div>
-
-      <div id="riskScore" class="risk"></div>
-      <div id="details"></div>
-    </div>
-  </div>
-
-  <script src="/static/script.js"></script>
+<script src="/static/script.js"></script>
 </body>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>PhishNet — AI Phishing Detection</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-  <div class="container">
-    <h1>🛡️ PhishNet</h1>
-    <p class="subtitle">AI-Powered Phishing Detection Platform</p>
-
-    <div class="scan-box">
-      <input id="inputText" type="text" placeholder="Enter URL or Email text to scan">
-      <button onclick="scan()">Scan</button>
-    </div>
-
-    <div id="loader" class="loader hidden">
-      <div class="spinner"></div>
-      <p>Analyzing threat patterns...</p>
-    </div>
-
-    <div id="result" class="result hidden">
-      <h2>Scan Result</h2>
-
-      <div class="gauge">
-        <div class="gauge-body">
-          <div id="gaugeFill" class="gauge-fill"></div>
-          <div class="gauge-center">
-            <span id="riskPercent">0%</span>
-          </div>
-        </div>
-      </div>
-
-      <div id="riskScore" class="risk"></div>
-      <div id="details"></div>
-    </div>
-  </div>
-
-  <script src="/static/script.js"></script>
-</body>
->>>>>>> 356acd049ea2f22d119ffb982b647351fa584b32
 </html>
