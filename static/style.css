@@ -104,14 +104,18 @@ h1 {
 }
 
 .gauge::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 220px 220px 0 0;
-    background: conic-gradient(
-        #22c55e 0deg calc(var(--value)*1.8deg),
-        #1e293b calc(var(--value)*1.8deg) 180deg
-    );
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 220px 220px 0 0;
+  background: conic-gradient(
+    #22c55e 0deg,
+    #22c55e calc(var(--value) * 0.9deg),
+    #f59e0b calc(var(--value) * 1.2deg),
+    #ef4444 calc(var(--value) * 1.8deg),
+    #0f172a calc(var(--value) * 1.8deg),
+    #0f172a 180deg
+  );
 }
 
 .gauge-center {
@@ -189,4 +193,16 @@ h1 {
 
 @keyframes spin{
   to{ transform: rotate(360deg); }
+}
+
+.result.legitimate {
+  color: #22c55e;
+}
+
+.result.suspicious {
+  color: #f59e0b;
+}
+
+.result.phishing {
+  color: #ef4444;
 }

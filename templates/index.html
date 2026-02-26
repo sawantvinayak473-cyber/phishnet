@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="result {{ 'legit' if label=='legitimate' else 'phish' }}">
+            <div class="result {{ label|lower }}">
                 {{ label }}
             </div>
             <div class="confidence">
