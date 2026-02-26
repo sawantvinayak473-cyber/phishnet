@@ -1,44 +1,54 @@
-from flask import Flask, render_template, request, jsonify
-import random
+from flask import Flask, render_template, request
+import os
+import pickle
 
 app = Flask(__name__)
 
-# Dummy model (stable demo)
-def predict_url(url):
-    if not url or len(url.strip()) == 0:
-        return 0, 0.0
-    
-    # simple rule demo
-    phishing_keywords = ["login", "verify", "bank", "paypal", "update", "secure"]
-    
-    score = sum(1 for k in phishing_keywords if k in url.lower())
-    
-    if score >= 2:
-        return 1, round(0.7 + score * 0.05, 2)
-    else:
-        return 0, round(0.4 + score * 0.05, 2)
+model = None
+try:
+    with open("model.pkl", "rb") as f:
+        model = pickle.load(f)
+except:
+    pass
 
-@app.route("/")
-def home():
-    return render_template("index.html")
 
-@app.route("/scan", methods=["POST"])
-def scan():
-    try:
-        data = request.get_json()
-        url = data.get("url", "")
+@app.route("/", methods=["GET", "POST"])
+def index():
+    result = None
+    score = 0
+    confidence = 0
+    label = ""
 
-        pred, conf = predict_url(url)
+    if request.method == "POST":
+        text = request.form.get("url")
 
-        return jsonify({
-            "prediction": int(pred),
-            "confidence": float(conf)
-        })
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        if text:
+            if model:
+                pred = model.predict([text])[0]
+                prob = model.predict_proba([text])[0][pred]
+            else:
+                pred = 0 if "login" in text or "verify" in text else 1
+                prob = 0.85 if pred == 0 else 0.65
 
-import os
+            score = int(prob * 100)
+            confidence = round(prob, 2)
+
+            if pred == 1:
+                label = "legitimate"
+            else:
+                label = "phishing"
+
+            result = True
+
+    return render_template(
+        "index.html",
+        result=result,
+        score=score,
+        confidence=confidence,
+        label=label
+    )
+
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-    
