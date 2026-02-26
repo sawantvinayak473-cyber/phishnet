@@ -1,136 +1,43 @@
-<<<<<<< HEAD
-async function scan() {
-  const text = document.getElementById("inputText").value;
-  const resultDiv = document.getElementById("result");
-  const loader = document.getElementById("loader");
-  const risk = document.getElementById("riskScore");
-  const details = document.getElementById("details");
-  const gaugeFill = document.getElementById("gaugeFill");
-  const riskPercent = document.getElementById("riskPercent");
+function scan() {
+    const url = document.getElementById("urlInput").value;
+    const loader = document.getElementById("loader");
+    const result = document.getElementById("result");
 
-  if (!text) {
-    alert("Please enter text to scan");
-    return;
-  }
+    loader.classList.remove("hidden");
+    result.classList.add("hidden");
 
-  resultDiv.classList.add("hidden");
-  loader.classList.remove("hidden");
+    fetch("/scan", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({url: url})
+    })
+    .then(res => res.json())
+    .then(data => {
+        loader.classList.add("hidden");
+        result.classList.remove("hidden");
 
-  const response = await fetch("/scan", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ text: text })
-  });
+        const conf = data.confidence || 0;
+        const percent = Math.round(conf * 100);
 
-  const data = await response.json();
+        document.getElementById("percent").innerText = percent + "%";
+        document.getElementById("confidence").innerText = "Confidence: " + conf;
 
-  await new Promise(r => setTimeout(r, 1200));
+        const needle = document.getElementById("needle");
+        const angle = percent * 1.8;
+        needle.style.transform = "rotate(" + angle + "deg)";
 
-  loader.classList.add("hidden");
-  resultDiv.classList.remove("hidden");
+        const label = document.getElementById("label");
 
-  let score = Math.round(data.confidence * 100);
-
-  if (data.prediction === 1) {
-    score = Math.max(score, 60);
-  }
-
-  riskPercent.textContent = score + "%";
-
-  const rotation = score * 1.8;
-  gaugeFill.style.transform = `rotate(${rotation}deg)`;
-
-  if (score > 70) gaugeFill.style.background = "#ff4d4d";
-  else if (score > 40) gaugeFill.style.background = "#ffb84d";
-  else gaugeFill.style.background = "#00ff9c";
-
-  let level = "Low Risk";
-  if (score > 75) level = "Critical";
-  else if (score > 55) level = "High";
-  else if (score > 35) level = "Medium";
-
-  if (data.prediction === 1) {
-    risk.textContent = "⚠️ Phishing Detected";
-    risk.className = "risk phishing typing";
-  } else {
-    risk.textContent = "✅ Legitimate";
-    risk.className = "risk safe typing";
-  }
-
-  setTimeout(() => {
-    risk.classList.remove("typing");
-  }, 1200);
-
-  details.textContent =
-    "Threat Level: " + level + " | Confidence: " + data.confidence.toFixed(2);
-=======
-async function scan() {
-  const text = document.getElementById("inputText").value;
-  const resultDiv = document.getElementById("result");
-  const loader = document.getElementById("loader");
-  const risk = document.getElementById("riskScore");
-  const details = document.getElementById("details");
-  const gaugeFill = document.getElementById("gaugeFill");
-  const riskPercent = document.getElementById("riskPercent");
-
-  if (!text) {
-    alert("Please enter text to scan");
-    return;
-  }
-
-  resultDiv.classList.add("hidden");
-  loader.classList.remove("hidden");
-
-  const response = await fetch("/scan", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ text: text })
-  });
-
-  const data = await response.json();
-
-  await new Promise(r => setTimeout(r, 1200));
-
-  loader.classList.add("hidden");
-  resultDiv.classList.remove("hidden");
-
-  let score = Math.round(data.confidence * 100);
-
-  if (data.prediction === 1) {
-    score = Math.max(score, 60);
-  }
-
-  riskPercent.textContent = score + "%";
-
-  const rotation = score * 1.8;
-  gaugeFill.style.transform = `rotate(${rotation}deg)`;
-
-  if (score > 70) gaugeFill.style.background = "#ff4d4d";
-  else if (score > 40) gaugeFill.style.background = "#ffb84d";
-  else gaugeFill.style.background = "#00ff9c";
-
-  let level = "Low Risk";
-  if (score > 75) level = "Critical";
-  else if (score > 55) level = "High";
-  else if (score > 35) level = "Medium";
-
-  if (data.prediction === 1) {
-    risk.textContent = "⚠️ Phishing Detected";
-    risk.className = "risk phishing typing";
-  } else {
-    risk.textContent = "✅ Legitimate";
-    risk.className = "risk safe typing";
-  }
-
-  setTimeout(() => {
-    risk.classList.remove("typing");
-  }, 1200);
-
-  details.textContent =
-    "Threat Level: " + level + " | Confidence: " + data.confidence.toFixed(2);
->>>>>>> 356acd049ea2f22d119ffb982b647351fa584b32
+        if (data.prediction === 1) {
+            label.innerText = "Phishing ⚠";
+            label.style.color = "red";
+        } else {
+            label.innerText = "Legitimate ✓";
+            label.style.color = "lime";
+        }
+    })
+    .catch(() => {
+        loader.classList.add("hidden");
+        alert("Server error");
+    });
 }

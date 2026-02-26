@@ -2,31 +2,31 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PhishNet</title>
 <link rel="stylesheet" href="/static/style.css">
 </head>
-
 <body>
+
 <div class="container">
+    <h1>PhishNet</h1>
+    <p class="subtitle">AI-Powered Phishing Detection Platform</p>
 
-    <div class="logo">
-        <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png">
-        <h1>PhishNet</h1>
+    <div class="input-row">
+        <input id="urlInput" placeholder="Enter URL or Email text to scan">
+        <button onclick="scan()">Scan</button>
     </div>
 
-    <p class="tagline">AI-Powered Phishing Detection Platform</p>
+    <div id="loader" class="loader hidden"></div>
 
-    <div class="scan-box">
-        <input id="urlInput" type="text" placeholder="Enter URL or Email text to scan">
-        <button onclick="scanURL()">Scan</button>
+    <div id="result" class="result hidden">
+        <div class="gauge">
+            <div id="needle"></div>
+            <div id="percent">0%</div>
+        </div>
+
+        <div id="label" class="label">Result</div>
+        <div id="confidence" class="confidence"></div>
     </div>
-
-    <div id="result" class="result-card" style="display:none;">
-        <h2 id="statusText"></h2>
-        <p id="confidenceText"></p>
-    </div>
-
 </div>
 
 <script src="/static/script.js"></script>

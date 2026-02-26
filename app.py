@@ -1,44 +1,22 @@
-
 from flask import Flask, render_template, request, jsonify
-import re
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
+import random
 
 app = Flask(__name__)
 
-data = {
-    "text": [
-        "Your account has been suspended click here",
-        "Verify your bank login immediately",
-        "Urgent action required reset password now",
-        "Meeting scheduled tomorrow at 10am",
-        "Project deadline extended",
-        "Lunch at 2pm?",
-        "Security alert unusual login detected",
-        "Invoice attached for your review"
-    ],
-    "label": [1, 1, 1, 0, 0, 0, 1, 0]
-}
-
-df = pd.DataFrame(data)
-
-def clean_text(text):
-    text = text.lower()
-    text = re.sub(r"http\S+", " URL ", text)
-    text = re.sub(r"[^a-z0-9 ]", " ", text)
-    text = re.sub(r"\s+", " ", text)
-    return text
-
-df["text"] = df["text"].apply(clean_text)
-
-model = Pipeline([
-    ("tfidf", TfidfVectorizer()),
-    ("clf", LogisticRegression())
-])
-
-model.fit(df["text"], df["label"])
+# Dummy model (stable demo)
+def predict_url(url):
+    if not url or len(url.strip()) == 0:
+        return 0, 0.0
+    
+    # simple rule demo
+    phishing_keywords = ["login", "verify", "bank", "paypal", "update", "secure"]
+    
+    score = sum(1 for k in phishing_keywords if k in url.lower())
+    
+    if score >= 2:
+        return 1, round(0.7 + score * 0.05, 2)
+    else:
+        return 0, round(0.4 + score * 0.05, 2)
 
 @app.route("/")
 def home():
@@ -46,81 +24,18 @@ def home():
 
 @app.route("/scan", methods=["POST"])
 def scan():
-    data = request.get_json()
-    text = data.get("text", "")
-    cleaned = clean_text(text)
-    prediction = model.predict([cleaned])[0]
-    probability = model.predict_proba([cleaned])[0][prediction]
+    try:
+        data = request.get_json()
+        url = data.get("url", "")
 
-    return jsonify({
-        "prediction": int(prediction),
-        "confidence": float(probability)
-    })
+        pred, conf = predict_url(url)
 
-import os
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
-
-
-from flask import Flask, render_template, request, jsonify
-import re
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
-
-app = Flask(__name__)
-
-data = {
-    "text": [
-        "Your account has been suspended click here",
-        "Verify your bank login immediately",
-        "Urgent action required reset password now",
-        "Meeting scheduled tomorrow at 10am",
-        "Project deadline extended",
-        "Lunch at 2pm?",
-        "Security alert unusual login detected",
-        "Invoice attached for your review"
-    ],
-    "label": [1, 1, 1, 0, 0, 0, 1, 0]
-}
-
-df = pd.DataFrame(data)
-
-def clean_text(text):
-    text = text.lower()
-    text = re.sub(r"http\S+", " URL ", text)
-    text = re.sub(r"[^a-z0-9 ]", " ", text)
-    text = re.sub(r"\s+", " ", text)
-    return text
-
-df["text"] = df["text"].apply(clean_text)
-
-model = Pipeline([
-    ("tfidf", TfidfVectorizer()),
-    ("clf", LogisticRegression())
-])
-
-model.fit(df["text"], df["label"])
-
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-@app.route("/scan", methods=["POST"])
-def scan():
-    data = request.get_json()
-    text = data.get("text", "")
-    cleaned = clean_text(text)
-    prediction = model.predict([cleaned])[0]
-    probability = model.predict_proba([cleaned])[0][prediction]
-
-    return jsonify({
-        "prediction": int(prediction),
-        "confidence": float(probability)
-    })
+        return jsonify({
+            "prediction": int(pred),
+            "confidence": float(conf)
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
-
