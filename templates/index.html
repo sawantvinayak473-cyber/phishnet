@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhishNet</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>PhishNet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
+
 <div class="bg"></div>
 
-<div class="app">
+<div class="container">
+
     <div class="card">
+        <img src="{{ url_for('static', filename='shield.png') }}" class="logo">
 
-        <div class="logo">🛡️</div>
         <h1>PhishNet</h1>
-        <p class="subtitle">AI-Powered Phishing Detection Platform</p>
+        <p class="tag">AI-Powered Phishing Detection Platform</p>
 
-        <form method="POST" class="scan-form">
-            <input type="text" name="url" placeholder="Enter URL or email content..." required>
-            <button type="submit">Scan</button>
+        <form method="POST">
+            <div class="input-group">
+                <input type="text" name="url" placeholder="Enter URL or Email text to scan" required>
+                <button type="submit">Scan</button>
+            </div>
         </form>
 
         {% if result %}
         <div class="result">
             <div class="gauge">
-                <div class="gauge-fill" style="transform: rotate({{ confidence*180 }}deg)"></div>
-                <div class="gauge-cover">{{ (confidence*100)|round(0) }}%</div>
+                <div class="gauge-fill" style="--value: {{ score }}"></div>
+                <div class="gauge-cover">{{ score }}%</div>
             </div>
 
-            <div class="status {{ result }}">
-                {{ result }}
+            <div class="status {{ label }}">
+                {{ label }}
             </div>
 
             <div class="confidence">
@@ -41,6 +42,8 @@
         {% endif %}
 
     </div>
+
 </div>
+
 </body>
 </html>

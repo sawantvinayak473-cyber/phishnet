@@ -2,51 +2,36 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
     height: 100vh;
+    background: radial-gradient(circle at 20% 20%, #0f4cff, #020b2a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.container {
+    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
-    background: #0f172a;
-    color: white;
-    overflow: hidden;
-}
-
-.bg {
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 30% 30%, #1e3a8a, #020617 70%);
-    animation: moveBg 20s infinite linear;
-}
-
-@keyframes moveBg {
-    0% { transform: translate(0,0); }
-    50% { transform: translate(-10%, -10%); }
-    100% { transform: translate(0,0); }
-}
-
-.app {
-    position: relative;
-    z-index: 2;
 }
 
 .card {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(18px);
+    background: rgba(255,255,255,0.08);
     border-radius: 20px;
-    padding: 40px 50px;
-    text-align: center;
+    padding: 40px;
     width: 420px;
+    text-align: center;
     box-shadow: 0 0 40px rgba(0,0,0,0.4);
 }
 
 .logo {
-    font-size: 40px;
+    width: 60px;
     margin-bottom: 10px;
 }
 
@@ -55,113 +40,92 @@ h1 {
     margin-bottom: 5px;
 }
 
-.subtitle {
-    color: #94a3b8;
-    margin-bottom: 30px;
+.tag {
+    opacity: 0.8;
+    margin-bottom: 25px;
 }
 
-.scan-form {
+.input-group {
     display: flex;
     gap: 10px;
-    margin-bottom: 30px;
 }
 
-.scan-form input {
+input {
     flex: 1;
     padding: 12px 14px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
     outline: none;
-    background: rgba(255,255,255,0.08);
-    color: white;
+    font-size: 14px;
 }
 
-.scan-form input::placeholder {
-    color: #94a3b8;
-}
-
-.scan-form button {
+button {
     padding: 12px 20px;
     border: none;
-    border-radius: 8px;
-    background: #22c55e;
-    color: white;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #1cff9b, #00ffa6);
+    color: black;
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
 }
 
-.scan-form button:hover {
-    background: #16a34a;
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px #00ffa6;
 }
 
 .result {
-    margin-top: 20px;
+    margin-top: 30px;
+}
+
+.status {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.status.legitimate {
+    color: #3cffb3;
+}
+
+.status.phishing {
+    color: #ff4d4d;
+}
+
+.confidence {
+    margin-top: 6px;
+    opacity: 0.8;
 }
 
 .gauge {
     width: 200px;
     height: 100px;
-    position: relative;
     margin: auto;
+    position: relative;
     overflow: hidden;
 }
 
-.gauge::before {
-    content: "";
-    position: absolute;
+.gauge-fill {
     width: 200px;
     height: 200px;
     border-radius: 50%;
     background: conic-gradient(
-        #ef4444 0deg,
-        #f97316 60deg,
-        #eab308 120deg,
-        #22c55e 180deg
+        #ff3d3d calc(var(--value) * 1%),
+        #00ffa6 0
     );
-}
-
-.gauge-fill {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    background: #0f172a;
-    border-radius: 50%;
-    transform-origin: center bottom;
-    transform: rotate(0deg);
-    transition: 1s ease;
+    transform: rotate(-90deg);
 }
 
 .gauge-cover {
+    width: 160px;
+    height: 80px;
+    background: #020b2a;
+    border-radius: 100px 100px 0 0;
     position: absolute;
     bottom: 0;
-    width: 200px;
-    height: 100px;
-    background: #0f172a;
-    border-top-left-radius: 200px;
-    border-top-right-radius: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 22px;
-}
-
-.status {
-    margin-top: 15px;
-    font-size: 22px;
-    font-weight: 600;
-}
-
-.status.Legitimate {
-    color: #22c55e;
-}
-
-.status.Phishing {
-    color: #ef4444;
-}
-
-.confidence {
-    margin-top: 5px;
-    color: #94a3b8;
+    left: 20px;
+    text-align: center;
+    line-height: 80px;
+    font-size: 24px;
 }
