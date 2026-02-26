@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PhishNet — AI Phishing Detection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🛡️ PhishNet</h1>
+    <p class="subtitle">AI-Powered Phishing Detection Platform</p>
+
+    <div class="scan-box">
+      <input id="inputText" type="text" placeholder="Enter URL or Email text to scan">
+      <button onclick="scan()">Scan</button>
+    </div>
+
+    <div id="loader" class="loader hidden">
+      <div class="spinner"></div>
+      <p>Analyzing threat patterns...</p>
+    </div>
+
+    <div id="result" class="result hidden">
+      <h2>Scan Result</h2>
+
+      <div class="gauge">
+        <div class="gauge-body">
+          <div id="gaugeFill" class="gauge-fill"></div>
+          <div class="gauge-center">
+            <span id="riskPercent">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="riskScore" class="risk"></div>
+      <div id="details"></div>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
