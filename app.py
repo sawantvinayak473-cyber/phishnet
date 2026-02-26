@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from flask import Flask, render_template, request, jsonify
 import re
 import pandas as pd
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
 
-=======
+
 from flask import Flask, render_template, request, jsonify
 import re
 import pandas as pd
@@ -123,4 +123,4 @@ def scan():
 
 if __name__ == "__main__":
     app.run(debug=True)
->>>>>>> 356acd049ea2f22d119ffb982b647351fa584b32
+
