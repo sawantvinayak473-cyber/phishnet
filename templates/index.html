@@ -35,7 +35,10 @@
         <form method="POST" action="/" class="scan-form">
             <!-- ✅ name=url matches Flask -->
             <input type="text" name="url" placeholder="Enter URL or Email text to scan" required>
-            <button type="submit">Scan</button>
+            <button type="submit" class="scan-btn">
+               <span class="btn-text">Scan</span>
+               <span class="spinner"></span>
+            </button>
         </form>
 
         {% if result %}
@@ -58,6 +61,11 @@
 
     </div>
 </div>
+<script>
+document.querySelector(".scan-form").addEventListener("submit", function(){
+    document.querySelector(".scan-btn").classList.add("loading");
+});
+</script>
 
 </body>
 </html>

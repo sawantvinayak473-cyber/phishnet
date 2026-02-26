@@ -1,3 +1,5 @@
+from email.mime import text
+
 from flask import Flask, render_template, request
 import os
 import pickle
@@ -18,27 +20,40 @@ def index():
     score = 0
     confidence = 0
     label = ""
+    text = ""
 
     if request.method == "POST":
         text = request.form.get("url")
 
-        if text:
-            if model:
-                pred = model.predict([text])[0]
-                prob = model.predict_proba([text])[0][pred]
-            else:
-                pred = 0 if "login" in text or "verify" in text else 1
-                prob = 0.85 if pred == 0 else 0.65
+    result = False
+    score = 0
+    confidence = 0
+    label = ""
 
-            score = int(prob * 100)
-            confidence = round(prob, 2)
+    if text:
+        text_lower = text.lower()
 
-            if pred == 1:
-                label = "legitimate"
-            else:
-                label = "phishing"
+        phishing_keywords = [
+            "login", "verify", "update", "bank",
+            "secure", "account", "password",
+            "click", "urgent", "limited", "suspend"
+        ]
 
-            result = True
+        for word in phishing_keywords:
+            if word in text_lower:
+                score += 10
+
+        score = min(score, 100)
+        confidence = round(score / 100, 2)
+
+        if score > 60:
+            label = "Phishing"
+        elif score > 30:
+            label = "Suspicious"
+        else:
+            label = "Legitimate"
+
+        result = True
 
     return render_template(
         "index.html",

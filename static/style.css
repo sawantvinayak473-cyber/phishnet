@@ -109,8 +109,8 @@ h1 {
     inset: 0;
     border-radius: 220px 220px 0 0;
     background: conic-gradient(
-        #ef4444 calc(var(--value)*1%),
-        #0f172a 0
+        #22c55e 0deg calc(var(--value)*1.8deg),
+        #1e293b calc(var(--value)*1.8deg) 180deg
     );
 }
 
@@ -147,4 +147,46 @@ h1 {
 .confidence {
     opacity: .7;
     font-size: 13px;
+}
+
+.scan-btn{
+  position: relative;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg,#22c55e,#3b82f6);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.3s;
+}
+
+.scan-btn:hover{
+  transform: scale(1.05);
+}
+
+.spinner{
+  width:16px;
+  height:16px;
+  border:2px solid transparent;
+  border-top:2px solid white;
+  border-radius:50%;
+  display:none;
+  animation:spin 0.8s linear infinite;
+}
+
+.loading .btn-text{
+  display:none;
+}
+
+.loading .spinner{
+  display:inline-block;
+}
+
+@keyframes spin{
+  to{ transform: rotate(360deg); }
 }
