@@ -2,33 +2,45 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PhishNet</title>
-<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
+<div class="bg"></div>
 
-<div class="container">
-    <h1>PhishNet</h1>
-    <p class="subtitle">AI-Powered Phishing Detection Platform</p>
+<div class="app">
+    <div class="card">
 
-    <div class="input-row">
-        <input id="urlInput" placeholder="Enter URL or Email text to scan">
-        <button onclick="scan()">Scan</button>
-    </div>
+        <div class="logo">🛡️</div>
+        <h1>PhishNet</h1>
+        <p class="subtitle">AI-Powered Phishing Detection Platform</p>
 
-    <div id="loader" class="loader hidden"></div>
+        <form method="POST" class="scan-form">
+            <input type="text" name="url" placeholder="Enter URL or email content..." required>
+            <button type="submit">Scan</button>
+        </form>
 
-    <div id="result" class="result hidden">
-        <div class="gauge">
-            <div id="needle"></div>
-            <div id="percent">0%</div>
+        {% if result %}
+        <div class="result">
+            <div class="gauge">
+                <div class="gauge-fill" style="transform: rotate({{ confidence*180 }}deg)"></div>
+                <div class="gauge-cover">{{ (confidence*100)|round(0) }}%</div>
+            </div>
+
+            <div class="status {{ result }}">
+                {{ result }}
+            </div>
+
+            <div class="confidence">
+                Confidence: {{ confidence }}
+            </div>
         </div>
+        {% endif %}
 
-        <div id="label" class="label">Result</div>
-        <div id="confidence" class="confidence"></div>
     </div>
 </div>
-
-<script src="/static/script.js"></script>
 </body>
 </html>
