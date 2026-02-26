@@ -1,133 +1,165 @@
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
 body {
-    height: 100vh;
-    background: radial-gradient(circle at 20% 20%, #0f4cff, #020b2a);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
+    background: #0F172A;
+    color: #E5E7EB;
+    min-height: 100vh;
+    overflow: hidden;
 }
 
-.container {
-    width: 100%;
+.background {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 30%, #2563EB55, transparent 40%),
+        radial-gradient(circle at 80% 70%, #22C55E55, transparent 40%),
+        #0F172A;
+    filter: blur(80px);
+}
+
+.layout {
+    position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 80px;
+    height: 100vh;
+}
+
+.brand {
+    max-width: 340px;
+}
+
+.logo svg {
+    width: 64px;
+    margin-bottom: 20px;
+}
+
+.brand h1 {
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.brand p {
+    color: #9CA3AF;
+    margin-top: 10px;
 }
 
 .card {
-    backdrop-filter: blur(18px);
-    background: rgba(255,255,255,0.08);
-    border-radius: 20px;
+    width: 360px;
     padding: 40px;
-    width: 420px;
-    text-align: center;
-    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+    border-radius: 24px;
+    background: rgba(17,24,39,0.6);
+    backdrop-filter: blur(20px);
+    box-shadow:
+        0 10px 40px #00000060,
+        inset 0 0 0 1px #ffffff10;
+    animation: float 6s ease-in-out infinite;
 }
 
-logo {
-  width: 70px;
-  height: 70px;
-  margin-bottom: 12px;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
-h1 {
-    font-size: 32px;
-    margin-bottom: 5px;
-}
-
-.tag {
-    opacity: 0.8;
-    margin-bottom: 25px;
-}
-
-.input-group {
+.scan-form {
     display: flex;
     gap: 10px;
 }
 
-input {
+.scan-form input {
     flex: 1;
-    padding: 12px 14px;
+    padding: 14px 16px;
     border-radius: 10px;
     border: none;
+    background: #020617;
+    color: white;
     outline: none;
-    font-size: 14px;
+    transition: 0.2s;
 }
 
-button {
-    padding: 12px 20px;
+.scan-form input:focus {
+    box-shadow: 0 0 0 2px #2563EB;
+}
+
+.scan-form button {
+    padding: 14px 20px;
     border: none;
     border-radius: 10px;
-    background: linear-gradient(45deg, #1cff9b, #00ffa6);
-    color: black;
+    background: linear-gradient(135deg,#22C55E,#2563EB);
+    color: white;
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
 }
 
-button:hover {
+.scan-form button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 15px #00ffa6;
+    box-shadow: 0 8px 20px #2563EB55;
 }
 
 .result {
-    margin-top: 30px;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.gauge {
+    width: 140px;
+    margin: auto;
+    position: relative;
+}
+
+.gauge svg {
+    transform: rotate(-90deg);
+}
+
+.bg {
+    fill: none;
+    stroke: #1F2937;
+    stroke-width: 10;
+}
+
+.progress {
+    fill: none;
+    stroke: url(#grad);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 326;
+    stroke-dashoffset: calc(326 - (326 * var(--value) / 100));
+    transition: stroke-dashoffset 1s ease;
+}
+
+.gauge-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 26px;
 }
 
 .status {
-    margin-top: 15px;
+    margin-top: 18px;
     font-size: 20px;
     font-weight: 600;
 }
 
-.status.legitimate {
-    color: #3cffb3;
+.status.Legitimate {
+    color: #22C55E;
 }
 
-.status.phishing {
-    color: #ff4d4d;
+.status.Phishing {
+    color: #EF4444;
 }
 
 .confidence {
     margin-top: 6px;
-    opacity: 0.8;
-}
-
-.gauge {
-    width: 200px;
-    height: 100px;
-    margin: auto;
-    position: relative;
-    overflow: hidden;
-}
-
-.gauge-fill {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: conic-gradient(
-        #ff3d3d calc(var(--value) * 1%),
-        #00ffa6 0
-    );
-    transform: rotate(-90deg);
-}
-
-.gauge-cover {
-    width: 160px;
-    height: 80px;
-    background: #020b2a;
-    border-radius: 100px 100px 0 0;
-    position: absolute;
-    bottom: 0;
-    left: 20px;
-    text-align: center;
-    line-height: 80px;
-    font-size: 24px;
+    color: #9CA3AF;
+    font-size: 14px;
 }
