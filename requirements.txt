@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 flask
 scikit-learn
+=======
+flask
+scikit-learn
+>>>>>>> 356acd049ea2f22d119ffb982b647351fa584b32
 pandas
