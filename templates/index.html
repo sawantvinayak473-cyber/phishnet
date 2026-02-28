@@ -31,9 +31,7 @@
         <h1>PhishNet</h1>
         <p class="tag">AI-Powered Phishing Detection Platform</p>
 
-        <!-- ✅ FIXED FORM -->
         <form method="POST" action="/" class="scan-form">
-            <!-- ✅ name=url matches Flask -->
             <input type="text" name="url" placeholder="Enter URL or Email text to scan" required>
             <button type="submit" class="scan-btn">
                <span class="btn-text">Scan</span>
@@ -43,24 +41,42 @@
 
         {% if result %}
         <div class="gauge-wrap">
+
             <div class="gauge">
                 <div class="gauge-fill" style="--value: {{ score }}"></div>
-                <div class="gauge-center">
-                    {{ score }}%
-                </div>
+                <div class="gauge-center">{{ score }}%</div>
             </div>
 
             <div class="result {{ label|lower }}">
                 {{ label }}
             </div>
+
             <div class="confidence">
                 Confidence: {{ confidence }}
             </div>
+
+            <div class="intel-panel">
+                <h3>URL Intelligence</h3>
+                <p>Domain: {{ analysis.domain if analysis.domain else "N/A" }}</p>
+                <p>HTTPS: {{ "Yes" if analysis.https else "No" }}</p>
+
+                {% if analysis.indicators %}
+                <ul>
+                    {% for i in analysis.indicators %}
+                    <li>{{ i }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No phishing indicators detected</p>
+                {% endif %}
+            </div>
+
         </div>
         {% endif %}
 
     </div>
 </div>
+
 <script>
 document.querySelector(".scan-form").addEventListener("submit", function(){
     document.querySelector(".scan-btn").classList.add("loading");

@@ -8,17 +8,18 @@
 body {
     min-height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: flex-start;
+    padding: 40px 0;
     background: radial-gradient(circle at 20% 20%, #1e3a8a, #020617 70%);
     color: white;
+    overflow-y: auto;
 }
 
 /* center wrapper */
 .center-wrap {
     width: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
 }
 
@@ -33,6 +34,7 @@ body {
     box-shadow: 0 20px 60px rgba(0,0,0,0.45);
     text-align: center;
     animation: fadeUp .6s ease;
+    height: auto;
 }
 
 @keyframes fadeUp {
@@ -205,4 +207,22 @@ h1 {
 
 .result.phishing {
   color: #ef4444;
+}
+
+.intel, .soc, #historyPanel {
+  margin-top: 20px;
+  padding: 15px;
+  background: #0f172a;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.soc pre {
+  color: #00ffc3;
+  font-size: 13px;
+}
+
+table {
+  width: 100%;
+  font-size: 12px;
 }

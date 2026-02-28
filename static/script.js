@@ -35,9 +35,55 @@ function scan() {
             label.innerText = "Legitimate ✓";
             label.style.color = "lime";
         }
+
+        if (data.analysis) {
+            const domainEl = document.getElementById("domain");
+            const httpsEl = document.getElementById("https");
+            const indicatorsEl = document.getElementById("indicators");
+
+            if (domainEl) {
+                domainEl.innerText = "Domain: " + (data.analysis.domain || "N/A");
+            }
+
+            if (httpsEl) {
+                httpsEl.innerText = "HTTPS: " + (data.analysis.https ? "Yes" : "No");
+            }
+
+            if (indicatorsEl) {
+                indicatorsEl.innerHTML = "";
+                if (data.analysis.indicators && data.analysis.indicators.length > 0) {
+                    data.analysis.indicators.forEach(i => {
+                        const li = document.createElement("li");
+                        li.innerText = i;
+                        indicatorsEl.appendChild(li);
+                    });
+                } else {
+                    const li = document.createElement("li");
+                    li.innerText = "No phishing indicators detected";
+                    indicatorsEl.appendChild(li);
+                }
+            }
+        }
+
+        loadHistory();
     })
     .catch(() => {
         loader.classList.add("hidden");
         alert("Server error");
+    });
+}
+
+function loadHistory() {
+    const table = document.getElementById("historyTable");
+    if (!table) return;
+
+    fetch("/history")
+    .then(res => res.json())
+    .then(rows => {
+        table.innerHTML = "<tr><th>Input</th><th>Score</th><th>Time</th></tr>";
+        rows.forEach(r => {
+            const score = Math.round(r[2] * 100);
+            table.innerHTML += `<tr><td>${r[0]}</td><td>${score}%</td><td>${r[3]}</td></tr>`;
+        });
     });
 }
