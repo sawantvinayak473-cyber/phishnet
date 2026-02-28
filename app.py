@@ -65,6 +65,58 @@ def analyze_input(text):
         "indicators": indicators
     }
 
+# -------- FIXED SCAN ROUTE (for JS fetch) --------
+@app.route("/scan", methods=["POST"])
+def scan():
+    data = request.json
+    text = data.get("url", "")
+
+    score = 0
+
+    phishing_keywords = [
+        "login", "verify", "update", "bank",
+        "secure", "account", "password",
+        "click", "urgent", "limited", "suspend"
+    ]
+
+    text_lower = text.lower()
+    for word in phishing_keywords:
+        if word in text_lower:
+            score += 10
+
+    score = min(score, 100)
+    confidence = round(score / 100, 2)
+
+    if score > 60:
+        prediction = 1
+    elif score > 30:
+        prediction = 1
+    else:
+        prediction = 0
+
+    analysis = analyze_input(text)
+
+    # save to DB (same as your logic)
+    conn = sqlite3.connect("scans.db")
+    c = conn.cursor()
+    c.execute(
+        "INSERT INTO scans (input, prediction, confidence, time) VALUES (?,?,?,?)",
+        (
+            text,
+            int(prediction),
+            float(confidence),
+            datetime.now().strftime("%Y-%m-%d %H:%M")
+        )
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "prediction": prediction,
+        "confidence": confidence,
+        "analysis": analysis
+    })
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     result = None

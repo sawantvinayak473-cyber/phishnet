@@ -226,3 +226,33 @@ table {
   width: 100%;
   font-size: 12px;
 }
+
+.dashboard {
+    margin-top: 40px;
+    background: rgba(0,0,0,0.3);
+    padding: 20px;
+    border-radius: 12px;
+    color: white;
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.stats div {
+    background: rgba(255,255,255,0.1);
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+#historyTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#historyTable th, #historyTable td {
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding: 8px;
+}

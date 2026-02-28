@@ -1,5 +1,7 @@
 function scan() {
     const url = document.getElementById("urlInput").value;
+    const inputText = url;
+
     const loader = document.getElementById("loader");
     const result = document.getElementById("result");
 
@@ -9,7 +11,7 @@ function scan() {
     fetch("/scan", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({url: url})
+        body: JSON.stringify({ url: url })
     })
     .then(res => res.json())
     .then(data => {
@@ -65,6 +67,34 @@ function scan() {
             }
         }
 
+        const scanType = "URL";
+        const scanResult = data.prediction === 1 ? "Phishing" : "Legitimate";
+        const riskScore = percent;
+
+        const scanRecord = {
+            input: inputText,
+            result: scanResult,
+            score: riskScore,
+            time: new Date().toLocaleString()
+        };
+
+        let history = JSON.parse(localStorage.getItem("phishnet_scans")) || [];
+        history.unshift(scanRecord);
+        localStorage.setItem("phishnet_scans", JSON.stringify(history));
+
+        updateDashboard();
+
+        fetch("http://localhost/phishnet/save_scan.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                input_text: inputText,
+                result: scanResult,
+                risk_score: riskScore,
+                scan_type: scanType
+            })
+        });
+
         loadHistory();
     })
     .catch(() => {
@@ -87,3 +117,48 @@ function loadHistory() {
         });
     });
 }
+
+function updateDashboard() {
+    console.log("Updating dashboard...");
+    const history = JSON.parse(localStorage.getItem("phishnet_scans")) || [];
+
+    const total = history.length;
+    const phishing = history.filter(s => s.result === "Phishing").length;
+    const legit = total - phishing;
+    const percent = total ? Math.round((phishing / total) * 100) : 0;
+
+    const totalEl = document.getElementById("totalScans");
+    const phishEl = document.getElementById("phishCount");
+    const legitEl = document.getElementById("legitCount");
+    const percentEl = document.getElementById("phishPercent");
+
+    if (totalEl) totalEl.innerText = total;
+    if (phishEl) phishEl.innerText = phishing;
+    if (legitEl) legitEl.innerText = legit;
+    if (percentEl) percentEl.innerText = percent + "%";
+
+    const table = document.getElementById("historyTable");
+    if (!table) return;
+
+    table.innerHTML = `
+        <tr>
+            <th>Input</th>
+            <th>Result</th>
+            <th>Risk</th>
+            <th>Time</th>
+        </tr>
+    `;
+
+    history.slice(0, 10).forEach(s => {
+        table.innerHTML += `
+            <tr>
+                <td>${s.input}</td>
+                <td>${s.result}</td>
+                <td>${s.score}%</td>
+                <td>${s.time}</td>
+            </tr>
+        `;
+    });
+}
+
+window.onload = updateDashboard;

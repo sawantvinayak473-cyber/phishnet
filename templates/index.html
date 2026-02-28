@@ -1,87 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhishNet</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhishNet</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <div class="bg"></div>
 
 <div class="center-wrap">
-    <div class="card">
+<div class="card">
 
-        <div class="logo-wrap">
-            <svg class="logo" viewBox="0 0 120 120">
-                <path d="M60 10 L100 30 L100 70 Q100 95 60 110 Q20 95 20 70 L20 30 Z"
-                      fill="url(#g1)" stroke="#7dd3fc" stroke-width="3"/>
-                <circle cx="60" cy="55" r="12" fill="#0f172a"/>
-                <rect x="57" y="55" width="6" height="20" rx="3" fill="#0f172a"/>
-                <defs>
-                    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#22d3ee"/>
-                        <stop offset="100%" stop-color="#6366f1"/>
-                    </linearGradient>
-                </defs>
-            </svg>
-        </div>
-
-        <h1>PhishNet</h1>
-        <p class="tag">AI-Powered Phishing Detection Platform</p>
-
-        <form method="POST" action="/" class="scan-form">
-            <input type="text" name="url" placeholder="Enter URL or Email text to scan" required>
-            <button type="submit" class="scan-btn">
-               <span class="btn-text">Scan</span>
-               <span class="spinner"></span>
-            </button>
-        </form>
-
-        {% if result %}
-        <div class="gauge-wrap">
-
-            <div class="gauge">
-                <div class="gauge-fill" style="--value: {{ score }}"></div>
-                <div class="gauge-center">{{ score }}%</div>
-            </div>
-
-            <div class="result {{ label|lower }}">
-                {{ label }}
-            </div>
-
-            <div class="confidence">
-                Confidence: {{ confidence }}
-            </div>
-
-            <div class="intel-panel">
-                <h3>URL Intelligence</h3>
-                <p>Domain: {{ analysis.domain if analysis.domain else "N/A" }}</p>
-                <p>HTTPS: {{ "Yes" if analysis.https else "No" }}</p>
-
-                {% if analysis.indicators %}
-                <ul>
-                    {% for i in analysis.indicators %}
-                    <li>{{ i }}</li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p>No phishing indicators detected</p>
-                {% endif %}
-            </div>
-
-        </div>
-        {% endif %}
-
-    </div>
+<div class="logo-wrap">
+<svg class="logo" viewBox="0 0 120 120">
+<path d="M60 10 L100 30 L100 70 Q100 95 60 110 Q20 95 20 70 L20 30 Z"
+fill="url(#g1)" stroke="#7dd3fc" stroke-width="3"/>
+<circle cx="60" cy="55" r="12" fill="#0f172a"/>
+<rect x="57" y="55" width="6" height="20" rx="3" fill="#0f172a"/>
+<defs>
+<linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#22d3ee"/>
+<stop offset="100%" stop-color="#6366f1"/>
+</linearGradient>
+</defs>
+</svg>
 </div>
 
-<script>
-document.querySelector(".scan-form").addEventListener("submit", function(){
-    document.querySelector(".scan-btn").classList.add("loading");
-});
-</script>
+<h1>PhishNet</h1>
+<p class="tag">AI-Powered Phishing Detection Platform</p>
+
+<div class="scan-form">
+<input id="urlInput" type="text" placeholder="Enter URL or Email text to scan">
+<button class="scan-btn" onclick="scan()">
+<span class="btn-text">Scan</span>
+<span class="spinner"></span>
+</button>
+</div>
+
+<div id="result" class="gauge-wrap hidden">
+
+<div class="gauge">
+<div id="needle" class="gauge-fill"></div>
+<div id="percent" class="gauge-center">0%</div>
+</div>
+
+<div id="label" class="result">-</div>
+<div id="confidence" class="confidence"></div>
+
+<div class="intel-panel">
+<h3>URL Intelligence</h3>
+<p id="domain">Domain: -</p>
+<p id="https">HTTPS: -</p>
+<ul id="indicators"></ul>
+</div>
+
+</div>
+
+<div id="loader" class="hidden">Scanning...</div>
+
+</div>
+</div>
+
+<div class="dashboard">
+<h2>Analytics Dashboard</h2>
+
+<div class="stats">
+<div>Total Scans: <span id="totalScans">0</span></div>
+<div>Phishing: <span id="phishCount">0</span></div>
+<div>Legitimate: <span id="legitCount">0</span></div>
+<div>Phishing %: <span id="phishPercent">0%</span></div>
+</div>
+
+<table id="historyTable"></table>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
